@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover, maximum-scale=1.0">
+<title>翡翠阁 · 古玩玉石店</title>
+<style>
+:root{
+  --paper:#FFF8E7; --paper2:#F5ECD7; --ink:#2C1810; --ink2:#5D4037;
+  --wood:#8B6914; --wood2:#6B4410; --woodL:#A0782C; --woodP:#D2A94E;
+  --red:#B22222; --red2:#8B0000; --gold:#C9A050; --goldL:#E8D5A0;
+  --jade:#4CAF50; --jade2:#2E7D32; --jadeL:#A5D6A7;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  font-family:'PingFang SC','Noto Sans SC','STSong','SimSun','KaiTi','Microsoft YaHei',serif;
+  background:#3C2410; color:var(--ink); max-width:420px; margin:0 auto;
+  min-height:100vh; overflow-x:hidden; user-select:none;
+  -webkit-user-select:none; -webkit-tap-highlight-color:transparent;
+  background-image:url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='60' height='60' fill='%233C2410'/%3E%3Crect width='30' height='30' fill='%23442A14'/%3E%3Crect x='30' y='30' width='30' height='30' fill='%23442A14'/%3E%3C/svg%3E");
+}
+#particles{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999}
+
+/* ====== 顶部木质牌匾 ====== */
+.top-bar{
+  background:linear-gradient(180deg,#6B4410,#4A2A08,#3A1C04);
+  padding:10px 14px;display:flex;justify-content:space-between;align-items:center;color:var(--goldL);
+  border-bottom:3px solid #8B6914;box-shadow:0 3px 12px rgba(0,0,0,.4);position:sticky;top:0;z-index:100;
+  background-image:repeating-linear-gradient(90deg,transparent,transparent 30px,rgba(255,255,255,.02) 30px,rgba(255,255,255,.02) 31px);
+}
+.top-bar .shop-name{font-size:21px;font-weight:900;letter-spacing:4px;text-shadow:0 2px 4px rgba(0,0,0,.5);font-family:'STKaiti','KaiTi','SimSun',serif}
+.top-bar .top-info{text-align:right;font-size:10px;opacity:.8}
+.top-bar .gold-display{font-size:17px;font-weight:800;background:rgba(0,0,0,.3);padding:4px 14px;border-radius:18px;border:1px solid rgba(200,160,80,.3);color:#FFD700}
+.top-bar .day-badge{background:rgba(255,255,255,.1);padding:2px 10px;border-radius:10px;font-size:10px;margin-left:4px}
+
+/* ====== 装饰灯笼 ====== */
+.lanterns{display:flex;justify-content:center;gap:60px;padding:2px 0;position:absolute;top:50px;left:0;right:0;pointer-events:none;z-index:2}
+.lantern{width:20px;height:28px;background:radial-gradient(ellipse,#E84855,#B22222);border-radius:50%;position:relative;box-shadow:0 0 15px rgba(200,30,30,.4)}
+.lantern::before{content:'';position:absolute;top:-3px;left:50%;transform:translateX(-50%);width:2px;height:6px;background:#C9A050}
+.lantern::after{content:'';position:absolute;bottom:-4px;left:50%;transform:translateX(-50%);width:12px;height:3px;background:#C9A050;border-radius:0 0 3px 3px}
+
+/* ====== 页面 ====== */
+.screen{display:none;padding:0 10px 130px;position:relative}
+.screen.on{display:block;background:linear-gradient(180deg,rgba(60,36,16,.3),rgba(60,36,16,.1) 30%,rgba(44,24,8,.5) 100%)}
+
+/* ====== 展厅 ====== */
+.hall-cards{display:flex;gap:6px;margin:10px 0}
+.hcard{
+  flex:1;background:linear-gradient(180deg,#FFF8E7,#EDE0C8);border-radius:14px;
+  padding:12px 6px;text-align:center;box-shadow:0 3px 8px rgba(0,0,0,.3),inset 0 0 0 2px #D2A94E;
+  border:2px solid #8B6914;font-family:'STKaiti','KaiTi',serif;
+}
+.hcard .hv{font-size:20px;font-weight:900;color:var(--ink)}.hcard .hl{font-size:9px;color:var(--ink2);margin-top:2px}
+
+/* 展厅场景 */
+.exhibition-hall{
+  position:relative;background:linear-gradient(180deg,#F5ECD7,#E8D5B8,#D4C4A8);
+  border-radius:20px;min-height:380px;margin:6px 0;overflow:hidden;
+  box-shadow:inset 0 0 80px rgba(0,0,0,.15),0 4px 20px rgba(0,0,0,.3);
+  border:3px solid #6B4410;touch-action:none;
+}
+/* 木地板 */
+.exhibition-hall::before{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:40%;
+  background:repeating-linear-gradient(0deg,#8B6914 0px,#A0782C 2px,transparent 2px,transparent 20px);
+  opacity:.15;pointer-events:none;
+}
+/* 屏风 */
+.exhibition-hall .screen-panel{
+  position:absolute;top:8px;left:8px;width:80px;height:100px;pointer-events:none;
+  background:linear-gradient(180deg,rgba(200,160,80,.2),rgba(200,160,80,.05));
+  border:1px solid rgba(139,105,20,.3);border-radius:4px;
+}
+.exhibition-hall .screen-panel::after{content:'🎋';position:absolute;bottom:4px;right:4px;font-size:14px}
+/* 花瓶 */
+.exhibition-hall .vase{
+  position:absolute;top:15px;right:12px;font-size:36px;pointer-events:none;
+  filter:drop-shadow(0 2px 4px rgba(0,0,0,.2));
+}
+/* 盆栽 */
+.exhibition-hall .bonsai{position:absolute;bottom:10px;right:8px;font-size:30px;pointer-events:none}
+.exhibition-hall .bonsai2{position:absolute;bottom:8px;left:10px;font-size:28px;pointer-events:none}
+
+/* 石场石头 */
+.coin-img{width:20px;height:20px;vertical-align:middle;margin-right:2px}
+.gem-img{width:32px;height:32px;vertical-align:middle}
+.gem-img-lg{width:48px;height:48px;vertical-align:middle}
+.yard-stone{
+  position:absolute;display:flex;align-items:center;justify-content:center;
+  cursor:grab;z-index:1;transition:transform .1s,filter .1s;
+  filter:drop-shadow(0 4px 8px rgba(0,0,0,.35));
+}
+.yard-stone:active{cursor:grabbing;z-index:10;transform:scale(1.08)!important}
+.yard-stone .ys-label{
+  position:absolute;bottom:-14px;left:50%;transform:translateX(-50%);font-size:8px;
+  color:var(--ink2);white-space:nowrap;font-weight:700;
+  background:rgba(255,255,255,.7);padding:1px 5px;border-radius:4px;pointer-events:none;
+  font-family:'STKaiti','KaiTi',serif;
+}
+.yard-info{
+  display:flex;justify-content:space-between;align-items:center;
+  font-size:10px;color:var(--goldL);margin-top:4px;font-family:'STKaiti','KaiTi',serif;
+}
+
+/* ====== NPC角色 ====== */
+.npc-character{
+  position:absolute;right:6px;bottom:50px;font-size:40px;pointer-events:none;
+  animation:npcFloat 3s ease-in-out infinite;z-index:5;filter:drop-shadow(0 2px 4px rgba(0,0,0,.3));
+}
+@keyframes npcFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+.npc-character .npc-bubble{
+  position:absolute;top:-28px;left:-20px;background:#FFF;border-radius:10px;
+  padding:3px 8px;font-size:8px;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,.15);
+  font-family:'STKaiti','KaiTi',serif;color:var(--ink);animation:none;
+}
+.npc-character .npc-bubble::after{
+  content:'';position:absolute;bottom:-4px;left:50%;transform:translateX(-50%);
+  border:5px solid transparent;border-top-color:#FFF;
+}
+
+/* ====== 宣纸卡片 ====== */
+.paper-card{
+  background:linear-gradient(180deg,#FFF8E7,#F0E5CC);border-radius:14px;
+  padding:14px;box-shadow:0 2px 8px rgba(0,0,0,.2),inset 0 0 0 1px #D2A94E;
+  border:1px solid #A0782C;font-family:'STKaiti','KaiTi',serif;margin:6px 0;
+}
+.paper-card .pc-title{font-size:15px;font-weight:700;border-bottom:1px dashed #C9A050;padding-bottom:4px;margin-bottom:6px}
+
+/* ====== 木牌按钮 ====== */
+.wood-btn{
+  display:inline-block;padding:10px 24px;border-radius:20px;
+  background:linear-gradient(180deg,#8B6914,#5C3A08);color:#FFD700;
+  border:2px solid #D2A94E;font-weight:900;font-size:15px;cursor:pointer;
+  box-shadow:0 4px 8px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.1);
+  text-shadow:0 1px 2px rgba(0,0,0,.5);font-family:'STKaiti','KaiTi',serif;
+  letter-spacing:2px;transition:.15s;
+}
+.wood-btn:active{transform:scale(.94);box-shadow:0 2px 4px rgba(0,0,0,.3)}
+.wood-btn.red{background:linear-gradient(180deg,#B22222,#6B0000);border-color:#E84855}
+.wood-btn.green{background:linear-gradient(180deg,#2E7D32,#1B5E20);border-color:#66BB6A}
+.wood-btn.gold{background:linear-gradient(180deg,#C9A050,#8B6914);border-color:#E8D5A0;color:#4A2A08}
+
+/* ====== 市场卡片 ====== */
+.market-card{
+  background:linear-gradient(180deg,#FFF8E7,#EDE0C8);border-radius:16px;
+  padding:12px;display:flex;gap:10px;align-items:center;
+  box-shadow:0 3px 10px rgba(0,0,0,.2);cursor:pointer;
+  border:2px solid #A0782C;margin-bottom:6px;transition:.15s;
+}
+.market-card:active{transform:scale(.97);border-color:#D2A94E}
+.market-card .mc-stone{font-size:38px;min-width:46px;text-align:center}
+.market-card .mc-info{flex:1}.market-card .mc-name{font-size:13px;font-weight:700;font-family:'STKaiti','KaiTi',serif}.market-card .mc-desc{font-size:10px;color:var(--ink2)}.market-card .mc-right{text-align:right}.market-card .mc-price{font-size:16px;font-weight:800;color:#8B6914}.market-card .mc-badge{font-size:8px;padding:2px 6px;border-radius:4px;display:inline-block;margin-top:2px;font-weight:600}.mc-badge.my{background:#E8F5E9;color:var(--jade2)}.mc-badge.kg{background:#FFF8E1;color:#E65100}
+
+/* ====== 磨石台 ====== */
+.grind-table{
+  background:linear-gradient(180deg,#8B0000,#5C0000);border-radius:24px;padding:16px;margin:8px 0;
+  box-shadow:0 8px 30px rgba(0,0,0,.4),inset 0 0 60px rgba(0,0,0,.3);text-align:center;
+  border:3px solid #6B4410;position:relative;
+}
+.grind-table::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:rgba(255,255,255,.1)}
+.grind-table .gt-info{display:flex;justify-content:space-between;margin-bottom:8px;gap:6px}
+.grind-table .gt-card{flex:1;background:rgba(0,0,0,.3);border-radius:10px;padding:6px 4px;text-align:center}
+.gt-card .gtl{font-size:9px;color:rgba(255,255,255,.6);font-family:'STKaiti','KaiTi',serif}
+.gt-card .gtv{font-size:15px;font-weight:900;color:#FFD700}
+.gw{position:relative;width:100%;max-width:280px;aspect-ratio:1;margin:0 auto;border-radius:50%;overflow:hidden;box-shadow:0 0 0 4px #5C3A08,0 0 30px rgba(0,0,0,.5)}
+.gw canvas{position:absolute;top:0;left:0;width:100%;height:100%;touch-action:none}
+.ghint{text-align:center;font-size:10px;color:#FFD700;margin-top:5px;font-family:'STKaiti','KaiTi',serif}
+.gpct{text-align:center;font-size:11px;font-weight:700;color:var(--jade);margin-top:2px;min-height:14px}
+.gr{text-align:center;margin:4px 0;min-height:30px;font-weight:700;font-family:'STKaiti','KaiTi',serif}
+
+/* 范围滑块 */
+.sz-ctrl{width:100%;max-width:280px;margin:4px auto 0;display:flex;align-items:center;gap:4px}
+.sz-ctrl input{flex:1;-webkit-appearance:none;height:5px;border-radius:3px;background:linear-gradient(90deg,#A5D6A7,#4CAF50,#FFB800,#FF5252)}
+.sz-ctrl input::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;border-radius:50%;background:var(--paper);border:2px solid var(--gold);box-shadow:0 2px 8px rgba(0,0,0,.3)}
+.szh{text-align:center;font-size:9px;color:#FF5252;margin-top:1px;min-height:12px;font-weight:600}
+
+/* 底部导航 */
+.bottom-nav{
+  position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:420px;
+  background:linear-gradient(0deg,rgba(60,30,10,.98),rgba(60,30,10,.92));
+  display:flex;border-top:3px solid #8B6914;z-index:100;
+  padding-bottom:env(safe-area-inset-bottom);box-shadow:0 -3px 12px rgba(0,0,0,.3);
+}
+.nav-btn{flex:1;padding:8px 0 6px;text-align:center;font-size:9px;color:rgba(255,255,255,.5);background:none;border:none;cursor:pointer;font-family:'STKaiti','KaiTi',serif}
+.nav-btn .ni{font-size:20px;display:block;margin-bottom:1px}
+.nav-btn.cur{color:#FFD700;text-shadow:0 0 8px rgba(255,215,0,.3)}
+.nav-btn.cur::before{content:'';position:absolute;top:-3px;left:30%;right:30%;height:3px;background:#D2A94E;border-radius:2px}
+
+/* 弹窗 */
+.modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.6);z-index:300;display:none;align-items:center;justify-content:center;max-width:420px;margin:0 auto}
+.modal.on{display:flex}
+.mcard{background:linear-gradient(180deg,#FFF8E7,#EDE0C8);border-radius:20px;padding:20px 16px;width:88%;text-align:center;animation:mIn .3s;box-shadow:0 12px 40px rgba(0,0,0,.4);border:3px solid #8B6914;font-family:'STKaiti','KaiTi',serif}
+@keyframes mIn{from{transform:scale(.85);opacity:0}to{transform:scale(1);opacity:1}}
+.mcard .mi{font-size:46px}.mcard .mt{font-size:17px;font-weight:700;margin:5px 0}.mcard .mb{font-size:11px;color:var(--ink2);margin-bottom:12px;line-height:1.5}
+.mcard .mbs{display:flex;gap:6px}.mcard .mbs button{flex:1;padding:10px;border-radius:18px;border:none;font-size:13px;font-weight:700;cursor:pointer;font-family:'STKaiti','KaiTi',serif}
+.myes{background:linear-gradient(180deg,#B22222,#6B0000);color:#FFD700;border:2px solid #E84855}.mno{background:#EDE0C8;color:var(--ink2);border:1px solid #A0782C}
+
+/* NPC气泡 */
+.npc-b{position:fixed;bottom:140px;left:50%;transform:translateX(-50%);z-index:250;background:linear-gradient(180deg,#FFF8E7,#EDE0C8);border-radius:16px;padding:10px 14px;box-shadow:0 6px 20px rgba(0,0,0,.3);font-size:11px;max-width:300px;text-align:center;animation:nIn .4s;border:2px solid #8B6914;display:none;font-family:'STKaiti','KaiTi',serif}
+.npc-b.show{display:block}@keyframes nIn{from{transform:translateX(-50%) translateY(20px);opacity:0}to{transform:translateX(-50%) translateY(0);opacity:1}}
+.npc-b .ni{font-size:24px}.npc-b .nn{font-size:11px;font-weight:700;color:#8B6914}.npc-b .nd{font-size:10px;color:var(--ink2);margin:2px 0}.npc-b .no{font-size:15px;font-weight:900;color:#8B6914}.npc-b .nbs{display:flex;gap:5px;margin-top:4px;justify-content:center}.npc-b .nbs button{padding:5px 12px;border-radius:12px;border:none;font-size:10px;font-weight:700;cursor:pointer;font-family:'STKaiti','KaiTi',serif}.na{background:linear-gradient(180deg,#C9A050,#8B6914);color:#FFF}.nd2{background:#EDE0C8;color:var(--ink2)}
+
+.npc-panel{position:fixed;bottom:120px;left:50%;transform:translateX(-50%);z-index:260;background:linear-gradient(180deg,#FFF8E7,#EDE0C8);border-radius:18px;padding:12px;box-shadow:0 8px 30px rgba(0,0,0,.3);width:90%;max-width:360px;display:none;border:2px solid #8B6914}
+.npc-panel.show{display:block;animation:nIn .4s}.npc-panel .nt{font-size:13px;font-weight:700;text-align:center;margin-bottom:6px;font-family:'STKaiti','KaiTi',serif}.npc-panel .nl{display:flex;gap:5px;overflow-x:auto}.npc-panel .npcb{min-width:70px;background:#F5ECD7;border-radius:12px;padding:8px 5px;text-align:center;border:1px solid #A0782C;cursor:pointer;flex-shrink:0}.npcb .nci{font-size:20px}.npcb .ncn{font-size:8px;font-weight:600}.npcb .nco{font-size:12px;font-weight:900;color:#8B6914}
+
+/* 闪光 */
+.crit-flash{position:fixed;top:0;left:0;width:100%;height:100%;background:radial-gradient(circle,rgba(0,200,83,.5),rgba(255,215,0,.3),transparent 70%);pointer-events:none;z-index:500;opacity:0}
+.crit-flash.fire{opacity:1;animation:cf .7s ease-out}@keyframes cf{0%{opacity:0}15%{opacity:1}100%{opacity:0}}
+.deal-pop{position:fixed;top:40%;left:50%;transform:translate(-50%,-50%);z-index:600;font-size:28px;font-weight:900;color:#FFD700;pointer-events:none;opacity:0;text-shadow:0 0 20px rgba(255,215,0,.8)}
+.deal-pop.fire{animation:dp .8s ease-out}@keyframes dp{0%{transform:translate(-50%,-50%) scale(.3);opacity:0}30%{transform:translate(-50%,-50%) scale(1.3);opacity:1}100%{transform:translate(-50%,-50%) translateY(-50px) scale(1);opacity:0}}
+
+.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%);background:rgba(44,24,16,.95);color:#FFD700;padding:8px 18px;border-radius:16px;font-size:12px;z-index:700;pointer-events:none;opacity:0;transition:opacity .3s;font-weight:700;border:1px solid #8B6914;font-family:'STKaiti','KaiTi',serif}
+.toast.show{opacity:1}
+.empty{text-align:center;padding:40px 20px;color:var(--ink2);font-family:'STKaiti','KaiTi',serif}.empty .e{font-size:40px}
+.pick-s{display:flex;gap:4px;overflow-x:auto;padding:5px 0;margin-top:4px}
+.pick-s .ps{min-width:62px;background:linear-gradient(180deg,#FFF8E7,#EDE0C8);border-radius:10px;padding:5px;text-align:center;border:1px solid #A0782C;cursor:pointer;flex-shrink:0;font-size:9px}.pick-s .ps:active,.pick-s .ps.sel{border-color:#D2A94E;background:#FFF3CD}.pick-s .ps .pe{font-size:22px}.pick-s .ps .pn{font-weight:600;margin-top:1px}
+
+/* 图鉴 */
+.cgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.citem{background:linear-gradient(180deg,#FFF8E7,#EDE0C8);border-radius:12px;padding:10px 4px;text-align:center;box-shadow:0 2px 6px rgba(0,0,0,.15);border:1px solid #A0782C;font-family:'STKaiti','KaiTi',serif}.citem.locked{opacity:.3}.citem .ci{font-size:28px}.citem .cn{font-size:9px;font-weight:700;margin-top:2px}
+
+/* 石头详情弹窗 */
+.si-pop{position:fixed;top:30%;left:50%;transform:translate(-50%,-50%);z-index:350;background:linear-gradient(180deg,#FFF8E7,#EDE0C8);border-radius:16px;padding:16px;box-shadow:0 10px 30px rgba(0,0,0,.4);display:none;text-align:center;min-width:200px;border:3px solid #8B6914;font-family:'STKaiti','KaiTi',serif}.si-pop.show{display:block;animation:mIn .3s}.si-pop .si-e{font-size:40px}.si-pop .si-n{font-size:13px;font-weight:700;margin:3px 0}.si-pop .si-m{font-size:9px;color:var(--ink2);line-height:1.4}.si-pop .si-b{display:flex;gap:4px;margin-top:6px;justify-content:center}.si-pop .si-b button{padding:5px 12px;border-radius:10px;border:none;font-size:10px;font-weight:700;cursor:pointer;font-family:'STKaiti','KaiTi',serif}
+
+.slist{display:flex;flex-direction:column;gap:5px}
+.sitem{background:linear-gradient(180deg,#FFF8E7,#EDE0C8);border-radius:14px;padding:10px;display:flex;gap:8px;align-items:center;box-shadow:0 2px 8px rgba(0,0,0,.15);border:1px solid #A0782C}.sitem .sie{font-size:30px}.sitem .sii{flex:1}.sitem .sin{font-weight:700;font-size:12px}.sitem .sit{font-size:8px;margin:2px 0}.sitem .sio{font-size:13px;font-weight:800;color:#8B6914}.sitem .sib{display:flex;gap:3px}.sitem .sib button{padding:4px 8px;border-radius:10px;border:none;font-size:9px;font-weight:700;cursor:pointer;font-family:'STKaiti','KaiTi',serif}
+
+/* 切割规划 */
+.craft-panel{position:fixed;bottom:100px;left:50%;transform:translateX(-50%);z-index:260;background:linear-gradient(180deg,#FFF8E7,#EDE0C8);border-radius:18px;padding:12px;box-shadow:0 8px 30px rgba(0,0,0,.3);width:92%;max-width:370px;display:none;border:3px solid #8B6914;font-family:'STKaiti','KaiTi',serif}
+.craft-panel.show{display:block;animation:nIn .4s}.craft-panel .cp-title{font-size:14px;font-weight:700;text-align:center;margin-bottom:4px}.craft-panel .cp-info{text-align:center;font-size:9px;color:var(--ink2);margin-bottom:6px;line-height:1.3}
+.craft-panel .cp-bar{height:5px;background:#EDE0C8;border-radius:3px;overflow:hidden;margin-bottom:4px}.craft-panel .cp-bar .cp-fill{height:100%;border-radius:3px;transition:width .3s}
+.craft-panel .cp-items{display:flex;gap:4px;overflow-x:auto;padding-bottom:3px}
+.craft-item{min-width:65px;background:#F5ECD7;border-radius:10px;padding:7px 5px;text-align:center;border:1px solid #A0782C;cursor:pointer;flex-shrink:0;font-size:9px}.craft-item:active{border-color:#D2A94E;background:#FFF3CD}.craft-item .ci-icon{font-size:24px}.craft-item .ci-name{font-weight:600}.craft-item .ci-pct{font-size:10px;font-weight:700;color:#8B6914}
+</style>
+</head>
+<body>
+<div class="crit-flash" id="cf"></div><div class="deal-pop" id="dp"></div><div id="particles"></div>
+
+<div class="top-bar">
+  <div><div class="shop-name">翡翠阁</div></div>
+  <div class="top-info">
+    <div class="gold-display"><img src="assets/goldCoin.png" class="coin-img"> <span id="gD">5000</span><span class="day-badge">第<span id="dayD">1</span>天</span></div>
+  </div>
+</div>
+
+<!-- 展厅 -->
+<div class="screen on" id="page-home">
+  <div class="hall-cards">
+    <div class="hcard"><div class="hv"><img src="assets/goldCoin.png" class="coin-img"> <span id="hG">5000</span></div><div class="hl">库房银两</div></div>
+    <div class="hcard"><div class="hv"><span id="hC">0</span>块</div><div class="hl">原石存货</div></div>
+    <div class="hcard"><div class="hv" style="color:#8B0000">Lv.<span id="hL">1</span></div><div class="hl">店铺字号</div></div>
+  </div>
+  <div class="exhibition-hall" id="stoneYard">
+    <div class="screen-panel"></div><div class="vase">🏺</div>
+    <div class="bonsai">🪴</div><div class="bonsai2">🌿</div>
+    <div class="npc-character" id="hallNPC">🧓<div class="npc-bubble">客官，看石头？</div></div>
+  </div>
+  <div class="yard-info"><span>👆 点石开料 · 长按查看 · 拖动摆置</span><span id="yardCount">0/15</span></div>
+</div>
+
+<!-- 石头详情 -->
+<div class="si-pop" id="siPop"><div class="si-e" id="siE"></div><div class="si-n" id="siN"></div><div class="si-m" id="siM"></div><div class="si-b"><button class="wood-btn red" id="siCut" style="padding:4px 14px;font-size:10px">🔪 开石</button><button class="wood-btn" style="padding:4px 14px;font-size:10px;background:#A0782C" onclick="document.getElementById('siPop').classList.remove('show')">关 闭</button></div></div>
+
+<!-- 市场 -->
+<div class="screen" id="page-buy">
+  <div class="paper-card"><span class="pc-title">🏪 原石市场</span> <span style="float:right;font-size:10px;color:var(--ink2)"><span id="cdT">第1天</span> <button class="wood-btn" style="padding:3px 10px;font-size:9px" onclick="advanceDay()">翌日→</button></span></div>
+  <div id="mg"></div>
+</div>
+
+<!-- 磨石台 -->
+<div class="screen" id="page-cut">
+  <div class="grind-table">
+    <div class="gt-info"><div class="gt-card"><div class="gtl">料钱</div><div class="gtv"><img src="assets/goldCoin.png" class="coin-img"> <span id="gCost">-</span></div></div><div class="gt-card"><div class="gtl">估价</div><div class="gtv"><img src="assets/goldCoin.png" class="coin-img"> <span id="gEst">-</span></div></div><div class="gt-card"><div class="gtl">涨跌</div><div class="gtv" id="gChg" style="font-size:12px;color:#FFD700">-</div></div></div>
+    <div class="gw" id="gw"><canvas id="jC"></canvas><canvas id="cC"></canvas><div class="ring" id="ring" style="position:absolute;border:2px solid rgba(255,255,255,.7);border-radius:50%;pointer-events:none;z-index:10;display:none;box-shadow:0 0 8px rgba(255,184,0,.4)"></div></div>
+    <div class="ghint" id="gHint">👆 指腹研磨石皮</div>
+    <div class="sz-ctrl"><span style="font-size:9px;color:#FFD700">细</span><input type="range" id="szS" min="10" max="110" value="28" step="2"><span style="font-size:9px;color:#FFD700">粗</span><span style="font-size:10px;font-weight:700;color:#FFD700" id="szV">28</span></div>
+    <div class="szh" id="szH"></div>
+    <div class="gpct" id="gPct"></div><div class="gr" id="gR"></div>
+    <div class="pick-s" id="pS"></div>
+  </div>
+</div>
+
+<!-- 摆摊 -->
+<div class="screen" id="page-sell"><div class="paper-card"><span class="pc-title">💰 翡翠出售</span></div><div class="slist" id="sl"></div></div>
+
+<!-- 图鉴 -->
+<div class="screen" id="page-book"><div class="paper-card"><span class="pc-title">📖 玉石图鉴</span></div><div class="cgrid" id="cg"></div></div>
+
+<!-- NPC气泡 -->
+<div class="npc-b" id="nB"><div class="ni" id="nI"></div><div class="nn" id="nN"></div><div class="nd" id="nD"></div><div class="no" id="nO"></div><div class="nbs"><button class="na" id="nA">💰 出手</button><button class="nd2" id="nDe">🔪 继续</button></div></div>
+<div class="npc-panel" id="nP"><div class="nt">🔥 多人竞价</div><div class="nl" id="nL"></div></div>
+
+<!-- 切割规划 -->
+<div class="craft-panel" id="craftP"><div class="cp-title">🔨 玉料规划</div><div class="cp-info" id="cpInfo"></div><div class="cp-bar"><div class="cp-fill" id="cpFill" style="background:#4CAF50"></div></div><div class="cp-items" id="cpItems"></div><div style="display:flex;gap:4px;margin-top:6px"><button class="wood-btn green" id="btnExec" style="flex:1;font-size:11px;padding:6px" onclick="executePlan()">🔪 开工切割</button><button class="wood-btn gold" id="btnSellRaw" style="flex:1;font-size:11px;padding:6px">💰 直接卖料</button></div></div>
+
+<!-- 购买弹窗 -->
+<div class="modal" id="mBuy"><div class="mcard"><div class="mi" id="mI"></div><div class="mt" id="mT"></div><div class="mb" id="mB"></div><div class="mbs"><button class="mno" onclick="clM()">再想想</button><button class="myes" id="mY">买 下</button></div></div></div>
+
+<div class="bottom-nav">
+  <button class="nav-btn cur" data-t="home"><span class="ni">🏠</span>展厅</button>
+  <button class="nav-btn" data-t="buy"><span class="ni">🛒</span>买石</button>
+  <button class="nav-btn" data-t="cut"><span class="ni">🔪</span>开石</button>
+  <button class="nav-btn" data-t="sell"><span class="ni">💰</span>摆摊</button>
+  <button class="nav-btn" data-t="book"><span class="ni">📖</span>图鉴</button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const F=n=>n.toLocaleString();
+
+// 玉种
+const JADE_TYPES=[{id:'qy',name:'青玉',emoji:'🪨',img:'assets/b_0.png',cls:'waste',tier:'凡品',val:1,color:'#9E9E9E',rarity:0},{id:'by',name:'白玉',emoji:'🤍',img:'assets/yellow_gem.png',cls:'low',tier:'凡品',val:1.5,color:'#E0E0E0',rarity:0},{id:'dz',name:'豆种',emoji:'🟢',img:'assets/green_gem.png',cls:'low',tier:'稀有',val:3,color:'#8BC34A',rarity:1},{id:'nz',name:'糯种',emoji:'💚',img:'assets/green_gem.png',cls:'mid',tier:'稀有',val:8,color:'#4CAF50',rarity:1},{id:'bz',name:'冰种',emoji:'💎',img:'assets/blue_gem.png',cls:'high',tier:'珍品',val:20,color:'#1B5E20',rarity:2},{id:'bl',name:'玻璃种',emoji:'💠',img:'assets/purple-gem.png',cls:'high',tier:'珍品',val:50,color:'#009688',rarity:2},{id:'dwl',name:'帝王绿',emoji:'👑',img:'assets/gems_6.png',cls:'legend',tier:'传说',val:200,color:'#00C853',rarity:3}];
+const CRAFTS=[{id:'plaque',name:'玉牌',icon:'📿',mat:12,val:0.8},{id:'pendant',name:'吊坠',icon:'💎',mat:18,val:1.0},{id:'ring',name:'戒指',icon:'💍',mat:10,val:1.3},{id:'beads',name:'玉珠',icon:'📿',mat:20,val:1.5},{id:'buddha',name:'玉佛',icon:'🧘',mat:30,val:2.5},{id:'phoenix',name:'凤凰',icon:'🦚',mat:35,val:3.0},{id:'zodiac',name:'生肖',icon:'🐉',mat:28,val:2.8},{id:'vase',name:'玉瓶',icon:'🏺',mat:38,val:3.5},{id:'bracelet',name:'手镯',icon:'⭕',mat:45,val:6},{id:'display',name:'摆件',icon:'🗿',mat:55,val:8}];
+const LOOKS=[{name:'灰皮料',emoji:'🪨',desc:'外表灰暗',price:[300,900],probs:[60,25,10,4,1,0,0]},{name:'黄沙皮',emoji:'⛰️',desc:'黄沙皮壳',price:[800,2000],probs:[40,30,15,10,4,1,0]},{name:'绿纹石',emoji:'🪨',desc:'带绿色纹',price:[1500,3500],probs:[15,25,25,20,10,4,1]},{name:'黑皮老坑',emoji:'🗿',desc:'黑皮壳',price:[2500,5000],probs:[5,15,25,30,15,8,2]},{name:'白盐沙',emoji:'💎',desc:'白盐沙皮',price:[4000,9000],probs:[0,5,15,25,30,18,7]}];
+const EVENTS=[{type:'my',name:'神秘原石',emoji:'🎁',desc:'低价博极品',price:[300,800],probs:[30,25,20,15,5,3,2],badge:'my',txt:'神秘'},{type:'kg',name:'赌石王',emoji:'👑',desc:'高价保底',price:[6000,12000],probs:[0,0,5,15,30,30,20],badge:'kg',txt:'赌石王'}];
+const NPCS=[{type:'tourist',name:'游客',icon:'🧑',mult:.6,appear:[0,30],chance:30,bye:'罢了罢了...'},{type:'merchant',name:'玉商',icon:'👨‍💼',mult:.8,appear:[30,70],chance:55,bye:'你且慢慢看。'},{type:'collector',name:'藏家',icon:'🧓',mult:1.2,appear:[70,100],chance:80,bye:'后生，你会后悔！'},{type:'scammer',name:'奸商',icon:'🕴️',mult:.4,appear:[0,100],chance:10,bye:'不识货！'},{type:'tycoon',name:'豪客',icon:'🤵',mult:1.5,appear:[50,100],chance:15,bye:'不卖？我加钱！'}];
+const DAY_EVENTS=[{name:'赌石节',icon:'🎪',desc:'好料概率升',eff:'premium'},{name:'翡翠涨',icon:'📈',desc:'售价+30%',eff:'sellBoost'},{name:'商贾至',icon:'🤝',desc:'NPC翻倍',eff:'npcBoost'},{name:'矿工惠',icon:'⛏️',desc:'原石-20%',eff:'discount'},{name:'鉴定师',icon:'🔍',desc:'裂纹减半',eff:'lessCrack'},{name:'雕展',icon:'🏆',desc:'成品+40%',eff:'craftBoost'},{name:'寻常日',icon:'☀️',desc:'无事件',eff:'none'}];
+
+let gold=5000,level=1,profit=0,stones=[],items=[],market=[],day=1,dayBuys=0,dayMax=5,dayEvent=null,pBuy=null;
+let gStone=null,gRev=0,gDone=false,gIdx=-1,brush=28;
+let npcs=[],nTimer=null,pEst=0,rels={},collJade={},collCraft={},craftPlan=[];
+const SK='jade_v9';
+
+function save(){localStorage.setItem(SK,JSON.stringify({gold,level,profit,stones,items,market,day,dayBuys,dayMax,dayEvent,rels,collJade,collCraft,date:new Date().toDateString()}))}
+function load(){try{const raw=localStorage.getItem(SK);if(!raw){rDay();return}const d=JSON.parse(raw);if(!d||d.date!==new Date().toDateString()){rDay();return}gold=d.gold||5000;level=d.level||1;profit=d.profit||0;stones=d.stones||[];items=d.items||[];market=d.market||[];day=d.day||1;dayBuys=d.dayBuys||0;dayMax=d.dayMax||5;dayEvent=d.dayEvent||null;rels=d.rels||{};collJade=d.collJade||{};collCraft=d.collCraft||{};if(!market.length)genDay()}catch(e){rDay()}}
+function rDay(){localStorage.removeItem(SK);day=1;gold=5000;level=1;profit=0;stones=[];items=[];rels={};collJade={};collCraft={};genDay();save()}
+
+// 每日
+function genDay(){market=[];dayBuys=0;dayMax=5+Math.floor(level/2);dayEvent=Math.random()<.4?DAY_EVENTS[Math.floor(Math.random()*(DAY_EVENTS.length-1))]:DAY_EVENTS[DAY_EVENTS.length-1];const isPrem=dayEvent.eff==='premium',isDisc=dayEvent.eff==='discount';for(let i=0;i<dayMax;i++){const t=isPrem?LOOKS[Math.min(LOOKS.length-1,Math.floor(Math.random()*3+2))]:LOOKS[Math.floor(Math.random()*LOOKS.length)];let p=Math.round((t.price[0]+Math.random()*(t.price[1]-t.price[0]))/100)*100;if(isDisc)p=Math.round(p*.8/100)*100;market.push({...t,id:'d'+day+'m'+i,price:p,badge:'',txt:''})}if(isPrem&&Math.random()<.5){const e=EVENTS[1];market.push({...e,id:'d'+day+'s',price:Math.round((e.price[0]+Math.random()*(e.price[1]-e.price[0]))/100)*100,badge:e.badge,txt:e.txt})}if(Math.random()<.3){const e=EVENTS[0];market.push({...e,id:'d'+day+'x',price:Math.round((e.price[0]+Math.random()*(e.price[1]-e.price[0]))/100)*100,badge:e.badge,txt:e.txt})}save()}
+function advanceDay(){if(!confirm('结束第'+day+'天经营？\n\n剩余原石不保留。'))return;day++;genDay();ua();st('☀️ 第'+day+'天 · 新石到货')}
+
+// 石形
+function genOutline(type,size,seed){const cx=50,cy=50,br=size==='large'?40:size==='medium'?30:22;const v=type==='ellipse'?24:type==='long'?20:type==='triangle'?16:28;const pts=[];for(let i=0;i<v;i++){const a=(i/v)*Math.PI*2;let r=br;if(type==='ellipse')r=br*(.75+Math.sin(a*2)*.25+sr(seed+i,18)*.12);else if(type==='long')r=br*(a<.8||a>5.5||(a>2.3&&a<3.9)?1.25:.65+sr(seed+i,12)*.1);else if(type==='triangle')r=br*(.55+Math.abs(Math.cos(a*1.5))*.5+sr(seed+i,15)*.1);else r=br*(.6+sr(seed+i,22)*.4);pts.push({x:cx+Math.cos(a)*r,y:cy+Math.sin(a)*r})}return pts}
+function isInPoly(x,y,pts){if(!pts||!pts.length)return true;let inside=false;for(let i=0,j=pts.length-1;i<pts.length;j=i++){if(((pts[i].y>y)!==(pts[j].y>y))&&(x<(pts[j].x-pts[i].x)*(y-pts[i].y)/(pts[j].y-pts[i].y)+pts[i].x))inside=!inside}return inside}
+
+function rollJade(probs){const t=probs.reduce((a,b)=>a+b,0);let r=Math.random()*t,a=0;for(let i=0;i<probs.length;i++){a+=probs[i];if(r<=a)return JADE_TYPES[i]}return JADE_TYPES[0]}
+
+// UI
+function ua(){rHome();rMarket();rCut();rSell();rBook();uTop()}
+function uTop(){document.getElementById('gD').textContent=F(gold);document.getElementById('dayD').textContent=day}
+function rHome(){
+  document.getElementById('hG').textContent=F(gold);document.getElementById('hC').textContent=stones.length;document.getElementById('hL').textContent=level;document.getElementById('yardCount').textContent=stones.length+'/'+(10+level*5);
+  const yard=document.getElementById('stoneYard');yard.querySelectorAll('.yard-stone').forEach(e=>e.remove());
+  stones.forEach((s,i)=>{
+    const el=document.createElement('div');el.className='yard-stone';const sz=s.size==='large'?80:s.size==='medium'?62:46;
+    const shape=s.shapeType==='ellipse'?'45% 55% 48% 52%':s.shapeType==='long'?'35% 65% 40% 60%':s.shapeType==='triangle'?'40% 60% 50% 50%':'42% 58% 45% 55%';
+    const stColor=s.price<1000?'linear-gradient(145deg,#9B8B7A,#6B5B48)':s.price<3000?'linear-gradient(145deg,#8B7B68,#5B4B38)':'linear-gradient(145deg,#6B5B48,#3B2B18)';
+    el.style.cssText=`left:${s.px||10}%;top:${s.py||10}%;width:${sz}px;height:${Math.round(sz*.88)}px;border-radius:${shape};background:${stColor};font-size:${sz*.38}px`;
+    el.innerHTML=`${s.emoji}<span class="ys-label">${F(s.price)}</span>`;el.dataset.idx=i;
+    let pressTimer,isDrag=false,startX,startY,origLeft,origTop;
+    el.addEventListener('touchstart',e=>{e.preventDefault();startX=e.touches[0].clientX;startY=e.touches[0].clientY;origLeft=parseFloat(el.style.left);origTop=parseFloat(el.style.top);isDrag=false;pressTimer=setTimeout(()=>{isDrag=true;showSi(i)},600)});
+    el.addEventListener('touchmove',e=>{e.preventDefault();if(!isDrag)return;const dx=(e.touches[0].clientX-startX)/yard.clientWidth*100,dy=(e.touches[0].clientY-startY)/yard.clientHeight*100;el.style.left=Math.max(0,Math.min(90,origLeft+dx))+'%';el.style.top=Math.max(0,Math.min(85,origTop+dy))+'%';stones[i].px=parseFloat(el.style.left);stones[i].py=parseFloat(el.style.top)});
+    el.addEventListener('touchend',()=>{clearTimeout(pressTimer);if(!isDrag){sw('cut');sG(i)}isDrag=false;save()});
+    el.addEventListener('mousedown',e=>{startX=e.clientX;startY=e.clientY;origLeft=parseFloat(el.style.left);origTop=parseFloat(el.style.top);isDrag=false;pressTimer=setTimeout(()=>{isDrag=true;showSi(i)},600)});
+    el.addEventListener('mousemove',e=>{if(!isDrag)return;const dx=(e.clientX-startX)/yard.clientWidth*100;el.style.left=Math.max(0,Math.min(90,origLeft+dx))+'%';el.style.top=Math.max(0,Math.min(85,origTop+(e.clientY-startY)/yard.clientHeight*100))+'%';stones[i].px=parseFloat(el.style.left);stones[i].py=parseFloat(el.style.top)});
+    el.addEventListener('mouseup',()=>{clearTimeout(pressTimer);if(!isDrag){sw('cut');sG(i)}isDrag=false;save()});
+    yard.appendChild(el);
+  });
+  document.getElementById('hallNPC').style.display=stones.length?'block':'none';
+}
+function showSi(i){const s=stones[i];const ji=s.jade;document.getElementById('siE').innerHTML=ji.img?`<img src="${ji.img}" class="gem-img-lg" style="border-radius:50%">`:s.emoji;document.getElementById('siN').textContent=s.name;document.getElementById('siM').innerHTML=`<img src="assets/goldCoin.png" class="coin-img">${F(s.price)} · ⚖ ${s.wt}<br>📅 第${s.day||'?'}天购入`;document.getElementById('siCut').onclick=()=>{document.getElementById('siPop').classList.remove('show');sw('cut');sG(i)};document.getElementById('siPop').classList.add('show')}
+
+function rMarket(){
+  document.getElementById('cdT').textContent='第'+day+'天';
+  const ev=dayEvent?`<div style="background:rgba(255,248,231,.5);border-radius:8px;padding:4px 10px;margin-bottom:4px;text-align:center;font-size:10px;font-weight:600;border:1px solid rgba(200,160,80,.3)">${dayEvent.icon} ${dayEvent.name}: ${dayEvent.desc}</div>`:'';
+  document.getElementById('mg').innerHTML=ev+market.map(s=>`<div class="market-card${s._bought?' style="opacity:.35;pointer-events:none"':''}" onclick="oB('${s.id}')"><div class="mc-stone">${s.emoji}</div><div class="mc-info"><div class="mc-name">${s.name}</div><div class="mc-desc">🔍 ${s.desc}</div></div><div class="mc-right"><div class="mc-price"><img src="assets/goldCoin.png" class="coin-img"> ${F(s.price)}</div>${s.txt?`<div class="mc-badge ${s.badge}">${s.txt}</div>`:''}${s._bought?'<div style="font-size:8px;color:var(--ink2)">已购</div>':''}</div></div>`).join('');
+}
+function oB(sid){const s=market.find(x=>x.id===sid);if(!s||s._bought||gold<s.price||dayBuys>=dayMax){st(s&&s._bought?'已购':gold<s.price?'银两不足':'今日已满');return}pBuy=s;document.getElementById('mI').textContent=s.emoji;document.getElementById('mT').textContent=s.name;document.getElementById('mB').innerHTML=`🔍 ${s.desc}<br>💰 <b><img src="assets/goldCoin.png" class="coin-img"> ${F(s.price)}</b><br>今日余${F(dayMax-dayBuys-1)}次`;document.getElementById('mY').onclick=()=>{cB();clM()};document.getElementById('mBuy').classList.add('on')}
+function cB(){if(!pBuy||gold<pBuy.price||dayBuys>=dayMax)return;gold-=pBuy.price;dayBuys++;const j=rollJade(pBuy.jadeProbs);const wn=(.5+Math.random()*7.5);const wt=wn.toFixed(1)+'kg';const sz=wn>5?'large':wn>2?'medium':'small';const cb=j.rarity>=3?5:j.rarity>=2?10:j.rarity>=1?20:35;const ec=dayEvent&&dayEvent.eff==='lessCrack'?.5:1;const crackPct=Math.min(95,Math.round((cb+Math.random()*cb*1.5)*ec));const st=['ellipse','long','triangle','blob'][Math.floor(Math.random()*4)];const out=genOutline(st,sz,Math.floor(wn*100));const mIdx=market.findIndex(x=>x.id===pBuy.id);if(mIdx>=0)market[mIdx]._bought=true;const px=8+Math.random()*72,py=8+Math.random()*65;stones.push({name:pBuy.name,emoji:pBuy.emoji,wt,size:sz,price:pBuy.price,jade:j,revealed:false,crackPct,cracksFound:[],crackRevealed:0,shapeType:st,matArea:Math.round(wn*18),outline:out,px,py,day});save();ua();st('✅ '+pBuy.name);pBuy=null}
+function clM(){document.getElementById('mBuy').classList.remove('on');pBuy=null}
+
+// 磨皮
+function sG(i){gIdx=i;cn();rCut()}
+function rCut(){
+  const l=document.getElementById('pS');if(!stones.length){l.innerHTML='<div style="color:#FFD700;font-size:10px;padding:4px">暂无原石</div>';document.getElementById('gCost').textContent='-';document.getElementById('gEst').textContent='-';return}
+  l.innerHTML=stones.map((s,i)=>`<div class="ps${gIdx===i?' sel':''}" onclick="sG(${i})"><div class="pe">${s.emoji}</div><div class="pn">${s.name}</div></div>`).join('');
+  if(gIdx>=0&&gIdx<stones.length)setupG();
+}
+function setupG(){
+  gStone={...stones[gIdx]};gRev=gStone.revealed||0;gDone=false;pEst=0;
+  document.getElementById('gCost').textContent=F(gStone.price);document.getElementById('gEst').textContent='0';document.getElementById('gChg').textContent='-';
+  document.getElementById('gPct').textContent='';document.getElementById('gR').innerHTML='';document.getElementById('gHint').style.display='block';cn();
+  const wrap=document.getElementById('gw'),jc=document.getElementById('jC'),cc=document.getElementById('cC');
+  const size=wrap.clientWidth,dpr=Math.min(devicePixelRatio||1,2);jc.width=cc.width=size*dpr;jc.height=cc.height=size*dpr;jc.style.width=cc.style.width=size+'px';jc.style.height=cc.style.height=size+'px';
+  const j=gStone.jade;const outline=gStone.outline||genOutline(gStone.shapeType||'blob',gStone.size,gStone.price);gStone.outline=outline;const sz=size*dpr;
+  const pts=outline.map(p=>({x:p.x/100*sz,y:p.y/100*sz}));gStone._pts=pts;
+  // 玉肉
+  const jx=jc.getContext('2d');jx.clearRect(0,0,sz,sz);jx.save();jx.beginPath();jx.moveTo(pts[0].x,pts[0].y);for(let i=1;i<pts.length;i++)jx.lineTo(pts[i].x,pts[i].y);jx.closePath();jx.clip();
+  const grad=jx.createRadialGradient(sz*.42,sz*.38,0,sz*.5,sz*.5,sz*.7);grad.addColorStop(0,j.color);grad.addColorStop(.5,`${j.color}cc`);grad.addColorStop(1,'#1a1a1a');jx.fillStyle=grad;jx.fill();
+  const seed=gStone.price*7;for(let i=0;i<30;i++){const px=pts[0].x+sr(seed+i,sz*.8),py=pts[0].y+sr(seed+i+50,sz*.8),pr=sz*(.02+sr(seed+i+100,.18));const pg=jx.createRadialGradient(px,py,0,px,py,pr);pg.addColorStop(0,`rgba(255,255,255,${.04+sr(seed+i+200,.18)})`);pg.addColorStop(1,'rgba(0,0,0,0)');jx.fillStyle=pg;jx.beginPath();jx.arc(px,py,pr,0,Math.PI*2);jx.fill()}jx.restore();
+  // 石皮
+  const cx=cc.getContext('2d');cx.clearRect(0,0,sz,sz);cx.save();cx.beginPath();cx.moveTo(pts[0].x,pts[0].y);for(let i=1;i<pts.length;i++)cx.lineTo(pts[i].x,pts[i].y);cx.closePath();cx.clip();
+  const ccs=[['#a89070','#8a7060','#5a4030','#2a1808'],['#b89870','#9a7a58','#6a4a30','#3a2008'],['#8a7a68','#6a5a48','#4a3a28','#1a0a04']];const cc2=ccs[Math.floor(sr(seed*3,3))];
+  const cg=cx.createRadialGradient(sz*.42,sz*.38,0,sz*.5,sz*.5,sz*.8);cg.addColorStop(0,cc2[0]);cg.addColorStop(.3,cc2[1]);cg.addColorStop(.7,cc2[2]);cg.addColorStop(1,cc2[3]);cx.fillStyle=cg;cx.fill();
+  const id=cx.getImageData(0,0,sz,sz),d=id.data;for(let i=0;i<d.length;i+=4){const n=(sr(seed+i,200)-100)/100*55;d[i]+=n;d[i+1]+=n;d[i+2]+=n}cx.putImageData(id,0,0);
+  for(let i=0;i<50;i++){cx.fillStyle=`rgba(${10+sr(seed+i*3,30)},${5+sr(seed+i*7,15)},${2+sr(seed+i*11,8)},${.08+sr(seed+i*13,.45)})`;cx.beginPath();cx.arc(sr(seed+i*17,sz),sr(seed+i*19,sz),1+sr(seed+i*23,8),0,Math.PI*2);cx.fill()}cx.restore();
+  if(gRev>0)preG(cx,gRev,sz,pts);bindG(cc,sz,pts);if(!gDone)sNT();
+}
+function preG(ctx,pct,w,pts){ctx.save();ctx.beginPath();ctx.moveTo(pts[0].x,pts[0].y);for(let i=1;i<pts.length;i++)ctx.lineTo(pts[i].x,pts[i].y);ctx.closePath();ctx.clip();ctx.globalCompositeOperation='destination-out';let rev=0;const total=w*w*pct/100;let r=brush;const cx=w/2,cy=w/2,mr=w*.7;while(rev<total&&r<mr){for(let a=0;a<Math.PI*2;a+=.2){if(rev>=total)break;ctx.beginPath();ctx.arc(cx+Math.cos(a)*r,cy+Math.sin(a)*r,brush,0,Math.PI*2);ctx.fill();rev+=Math.PI*brush*brush*.1}r+=brush*.8}ctx.restore()}
+function bindG(c,sz,pts){
+  let act=false,lx=0,ly=0;const g=(x,y,sr2)=>{if(gDone||document.getElementById('nP').classList.contains('show')||document.getElementById('nB').classList.contains('show'))return;const r=c.getBoundingClientRect(),sx=x*(c.width/r.width),sy=y*(c.height/r.height);if(!isInPoly(sx,sy,pts))return;
+    if(sr2){const ring=document.getElementById('ring'),rw=r.width,rs=brush*2*(rw/c.width);ring.style.display='block';ring.style.width=rs+'px';ring.style.height=rs+'px';ring.style.left=(x-rs/2)+'px';ring.style.top=(y-rs/2)+'px'}
+    const ctx=c.getContext('2d');ctx.save();ctx.beginPath();ctx.moveTo(pts[0].x,pts[0].y);for(let i=1;i<pts.length;i++)ctx.lineTo(pts[i].x,pts[i].y);ctx.closePath();ctx.clip();ctx.globalCompositeOperation='destination-out';ctx.beginPath();if(lx&&ly&&Math.abs(sx-lx)<brush*3){ctx.moveTo(lx,ly);ctx.lineTo(sx,sy);ctx.lineWidth=brush*1.3;ctx.lineCap='round'}else ctx.arc(sx,sy,brush/2,0,Math.PI*2);ctx.stroke();ctx.fill();ctx.restore();lx=sx;ly=sy;calcG(c,sz)};
+  const p=e=>({x:(e.touches?e.touches[0].clientX:e.clientX)-c.getBoundingClientRect().left,y:(e.touches?e.touches[0].clientY:e.clientY)-c.getBoundingClientRect().top});
+  c.addEventListener('touchstart',e=>{e.preventDefault();act=true;lx=null;ly=null;const pp=p(e);g(pp.x,pp.y,true);document.getElementById('gHint').style.display='none'},{passive:false});
+  c.addEventListener('touchmove',e=>{e.preventDefault();if(!act)return;g(p(e).x,p(e).y,false)},{passive:false});
+  c.addEventListener('touchend',()=>{act=false;lx=null;ly=null;document.getElementById('ring').style.display='none'});c.addEventListener('touchcancel',()=>{act=false});
+  c.addEventListener('mousedown',e=>{act=true;lx=null;ly=null;const pp=p(e);g(pp.x,pp.y,true);document.getElementById('gHint').style.display='none'});
+  c.addEventListener('mousemove',e=>{if(!act)return;g(p(e).x,p(e).y,false)});c.addEventListener('mouseup',()=>{act=false;document.getElementById('ring').style.display='none'});
+}
+let gTh=0;
+function calcG(c,sz){const now=Date.now();if(now-gTh<250)return;gTh=now;const ctx=c.getContext('2d'),step=40;let cl=0;for(let x=0;x<step;x++)for(let y=0;y<step;y++){try{if(ctx.getImageData(Math.floor(x*(sz/step)+sz/step/2),Math.floor(y*(sz/step)+sz/step/2),1,1).data[3]===0)cl++}catch(e){}}const pct=Math.min(99,Math.round((cl/(step*step))*100));if(pct===Math.round(gRev))return;gRev=pct;gStone.revealed=pct;
+  const j=gStone.jade,cr=gStone.crackRevealed||0,cm=cr>40?.3:cr>15?.7:cr>0?.9:1.0;const est=Math.round(gStone.price*j.val*Math.max(.05,pct/100)*cm);const ch=pEst>0?Math.round((est-pEst)/pEst*100):0;
+  document.getElementById('gEst').textContent=F(est);const ce=document.getElementById('gChg');ce.textContent=(ch>=0?'↑+':'↓')+Math.abs(ch)+'%';ce.style.color=ch>=0?'#4CAF50':ch<0?'#FF5252':'#FFD700';
+  document.getElementById('gPct').textContent='研磨 '+pct+'%';
+  // 裂纹
+  const cp=gStone.crackPct||0;const cfs=gStone.cracksFound||[];if(pct>15&&cfs.length<4&&Math.random()<cp/200){const sev=cp>70?'fatal':cp>40?'severe':cp>15?'medium':'minor';cfs.push({pct,sev});gStone.cracksFound=cfs;gStone.crackRevealed=cp;document.getElementById('szH').textContent='⚠️ '+(sev==='fatal'?'致命裂':sev==='severe'?'贯穿裂':sev==='medium'?'明显裂':'轻微裂');setTimeout(()=>document.getElementById('szH').textContent='',3000)}
+  if(brush>65&&cfs.length>0&&Math.random()<.15){gStone.crackRevealed=Math.min(95,(gStone.crackRevealed||0)+5);document.getElementById('szH').textContent='⚠️ 裂纹扩散';setTimeout(()=>document.getElementById('szH').textContent='',2000)}
+  pEst=est;if(pct>=99)finG();
+}
+function finG(){gDone=true;cn();const s=gStone,j=s.jade,val=Math.round(s.price*j.val);document.getElementById('gEst').textContent=F(val);document.getElementById('gPct').textContent='✅ 研磨完成';document.getElementById('gHint').style.display='none';const r=document.getElementById('gR');let ex='';if(j.id==='dwl'){cF();sp(50,40,'#00C853',55);sp(50,40,'#FFD700',45);st('✨ 逆天改命！帝王绿！！！');ex='<div style="font-size:20px;font-weight:900;color:var(--imperial);margin-top:3px">👑 传说·帝王绿！</div>'}else if(j.rarity>=2){sp(50,40,j.color,30);ex=`<div style="font-size:15px;font-weight:700;color:${j.color};margin-top:3px">💎 ${j.tier}·${j.name}！</div>`}else if(j.rarity>=1){sp(50,40,j.color,10);ex=`<div style="font-size:12px;font-weight:600;color:${j.color};margin-top:2px">💚 ${j.tier}·${j.name}</div>`}else ex='<div style="font-size:13px;font-weight:700;color:#9E9E9E;margin-top:2px">😞 凡品杂石</div>';r.innerHTML=`<div style="font-size:16px" class="${j.cls}">${j.emoji} ${j.name} · ${j.tier}</div>${ex}`;collJade[j.id]=true;save();ua();showCraftP(s,j,val)}
+// 切割规划
+function showCraftP(s,j,val){const cr=s.crackRevealed||0,crL=cr>70?'fatal':cr>40?'severe':cr>15?'medium':'minor';const up=crL==='fatal'?40:crL==='severe'?60:crL==='medium'?80:95;const ma=s.matArea||Math.round(parseFloat(s.wt)*18),us=Math.round(ma*up/100);craftPlan=[];document.getElementById('cpInfo').innerHTML=`${j.emoji} ${j.name} · ${j.tier}<br>料${ma}单位 · ${us}可用`;document.getElementById('btnSellRaw').onclick=()=>{sellRaw(s,j,val)};renderCP(val,us,cr);document.getElementById('craftP').classList.add('show')}
+function renderCP(val,us,cr){const crL=cr>70?'fatal':cr>40?'severe':cr>15?'medium':'minor';const av=CRAFTS.filter(c=>{if(crL==='fatal')return c.mat<=20;if(crL==='severe')return c.mat<=35;return true});const used=craftPlan.reduce((s,cp)=>{const c=CRAFTS.find(x=>x.id===cp.cid);return s+(c?c.mat*cp.n:0)},0);const rem=Math.max(0,us-used),pct=us>0?Math.round(used/us*100):0;document.getElementById('cpFill').style.width=Math.min(100,pct)+'%';document.getElementById('cpFill').style.background=pct>90?'#4CAF50':pct>50?'#FFB800':'#FF5252';document.getElementById('cpItems').innerHTML=`<div style="width:100%;text-align:center;font-size:9px;color:var(--ink2);margin-bottom:3px">利用率:${pct}% · 余${rem}单位</div><div style="display:flex;gap:3px;overflow-x:auto">${av.map(c=>{const can=rem>=c.mat;const cv=Math.round(val*(c.mat/100)*c.val);return`<div class="craft-item" style="${can?'':'opacity:.4;pointer-events:none'}" onclick="addCP('${c.id}')"><div class="ci-icon">${c.icon}</div><div class="ci-name">${c.name}</div><div class="ci-pct">${c.mat}%·<img src="assets/goldCoin.png" class="coin-img">${F(cv)}</div></div>`}).join('')}</div>${craftPlan.length?`<div style="font-size:9px;text-align:center;margin-top:3px">📋 ${craftPlan.map(cp=>CRAFTS.find(c=>c.id===cp.cid)?.icon+'×'+cp.n).join(' ')} <button onclick="craftPlan=[];renderCP(${val},${us},${cr})" style="background:none;border:none;color:#B22222;font-size:9px;cursor:pointer">清</button></div>`:''}`}
+function addCP(cid){const s=gStone,cr=s.crackRevealed||0,crL=cr>70?'fatal':cr>40?'severe':cr>15?'medium':'minor';const up=crL==='fatal'?40:crL==='severe'?60:crL==='medium'?80:95;const us=Math.round((s.matArea||Math.round(parseFloat(s.wt)*18))*up/100);const c=CRAFTS.find(x=>x.id===cid);if(!c)return;const used=craftPlan.reduce((s,cp)=>{const cf=CRAFTS.find(x=>x.id===cp.cid);return s+(cf?cf.mat*cp.n:0)},0);if(used+c.mat>us){st('⚠️ 玉料不足');return}const ex=craftPlan.find(cp=>cp.cid===cid);if(ex)ex.n++;else craftPlan.push({cid,n:1});renderCP(Math.round(s.price*s.jade.val),us,cr)}
+function executePlan(){if(!craftPlan.length)return;const s=gStone,j=s.jade,val=Math.round(s.price*j.val);let tp=0,ti=0;for(const cp of craftPlan){const c=CRAFTS.find(x=>x.id===cp.cid);if(!c)continue;for(let i=0;i<cp.n;i++){const cr=s.crackRevealed||0,crL=cr>70?'fatal':cr>40?'severe':cr>15?'medium':'minor',cf=crL==='fatal'?35:crL==='severe'?20:crL==='medium'?10:3;if(Math.random()*100<cf){const fb=CRAFTS[0],fv=Math.round(val*(fb.mat/100)*fb.val*.3);items.push({name:fb.name+'(碎)',icon:fb.icon,jade:j,value:fv,cost:0,sold:false});collCraft[fb.id]=true;tp+=fv}else{const evB=dayEvent&&dayEvent.eff==='craftBoost'?1.4:1,iv=Math.round(val*(c.mat/100)*c.val*evB);items.push({name:c.name,icon:c.icon,jade:j,value:iv,cost:0,sold:false});collCraft[c.id]=true;tp+=iv}ti++}}craftPlan=[];stones.splice(gIdx,1);gIdx=-1;document.getElementById('craftP').classList.remove('show');if(tp>0){profit+=tp;level=Math.max(1,Math.floor(profit/5000)+1)}st(`🔪 ${ti}件玉器 · <img src="assets/goldCoin.png" class="coin-img">${F(tp)}`);sp(50,40,'#4CAF50',18);save();ua()}
+function sellRaw(s,j,val){gold+=val;profit+=val-s.price;stones.splice(gIdx,1);gIdx=-1;document.getElementById('craftP').classList.remove('show');if(val-s.price>0)level=Math.max(1,Math.floor(profit/5000)+1);st('💰 +'+F(val));save();ua()}
+
+// NPC
+function cn(){npcs=[];clearTimeout(nTimer);nTimer=null;document.getElementById('nB').classList.remove('show');document.getElementById('nP').classList.remove('show')}
+function sNT(){clearTimeout(nTimer);nTimer=setTimeout(tSN,4000+Math.random()*8000)}
+function tSN(){if(gDone||!document.getElementById('page-cut').classList.contains('on'))return;const pct=gRev,eb=dayEvent&&dayEvent.eff==='npcBoost'?2:1;const cand=NPCS.filter(n=>pct>=n.appear[0]&&pct<=n.appear[1]&&Math.random()*100<n.chance*eb);if(!cand.length){sNT();return}const npc=cand[Math.floor(Math.random()*cand.length)],t=(rels[npc.type]||0),mult=npc.mult+t*.02;const j=gStone.jade,cr=gStone.crackRevealed||0,cm=cr>40?.3:cr>15?.7:cr>0?.9:1.0;const est=Math.round(gStone.price*j.val*Math.max(.05,pct/100)*cm),dmg=brush>65?Math.max(.85,1-(brush-65)*.003):1;const offer=Math.max(10,Math.round(est*mult*dmg/100)*100);npcs.push({...npc,offer,est});if(npcs.length>=3)showNP();else showNB(npcs[npcs.length-1])}
+function showNB(npc){document.getElementById('nI').textContent=npc.icon;document.getElementById('nN').textContent=npc.name;const cr=gStone.crackRevealed||0;document.getElementById('nD').textContent=cr>40?'「有裂，我只出这些」':cr>15?'「有纹...得压价」':'「这石头不错！」';document.getElementById('nO').textContent='💰 '+F(npc.offer);document.getElementById('nB').classList.add('show');document.getElementById('nA').onclick=()=>aN(npc);document.getElementById('nDe').onclick=()=>dN(npc)}
+function showNP(){document.getElementById('nB').classList.remove('show');document.getElementById('nP').classList.add('show');document.getElementById('nL').innerHTML=npcs.map((n,i)=>`<div class="npcb${i===0?' style="border-color:#D2A94E"':''}" onclick="aN(npcs[${i}])"><div class="nci">${n.icon}</div><div class="ncn">${n.name}</div><div class="nco"><img src="assets/goldCoin.png" class="coin-img">${F(n.offer)}</div></div>`).join('');setTimeout(()=>{if(document.getElementById('nP').classList.contains('show'))dA()},12000)}
+function aN(npc){const v=npc.offer;gold+=v;profit+=v-gStone.price;rels[npc.type]=(rels[npc.type]||0)+1;document.getElementById('nB').classList.remove('show');document.getElementById('nP').classList.remove('show');npcs=[];dP();sp(50,40,'#FFD700',30);st('🤝 成交！+'+F(v));gDone=true;cn();const s=gStone;items.push({name:s.name,icon:s.jade.emoji,jade:s.jade,value:v,cost:s.price,sold:false});stones.splice(gIdx,1);gIdx=-1;if(v-s.price>0)level=Math.max(1,Math.floor(profit/5000)+1);save();ua()}
+function dN(npc){document.getElementById('nB').classList.remove('show');npcs=npcs.filter(n=>n!==npc);st(npc.name+':「'+npc.bye+'」');sNT()}
+function dA(){document.getElementById('nP').classList.remove('show');npcs=[];sNT()}
+
+// 摆摊
+function rSell(){const l=document.getElementById('sl');if(!items.length){l.innerHTML='<div class="empty"><div class="e">🏪</div><div>暂无玉器</div></div>';return}const sb2=dayEvent&&dayEvent.eff==='sellBoost'?1.3:1;l.innerHTML=items.map((it,i)=>{const o=Math.round(it.value*sb2*(.8+Math.random()*.5));return`<div class="sitem"><div class="sie">${it.icon}</div><div class="sii"><div class="sin">${it.name}</div><div class="sit" style="color:${it.jade.color}">${it.jade.name}·${it.jade.tier}</div><div class="sio">💰 <img src="assets/goldCoin.png" class="coin-img">${F(o)}</div></div><div class="sib"><button class="wood-btn gold" style="padding:3px 8px;font-size:8px" onclick="dS(${i},${o})">出售</button><button class="wood-btn" style="padding:3px 8px;font-size:8px;background:#A0782C" onclick="dW(${i})">等涨</button></div></div>`}).join('')}
+function dS(i,p){gold+=p;profit+=p-items[i].cost;st('💰 +'+F(p));sp(50,80,'#FFD700',10);items.splice(i,1);save();ua()}
+function dW(i){const b=Math.round(items[i].value*(.85+Math.random()*.55));st('⏳ 新出价: <img src="assets/goldCoin.png" class="coin-img">'+F(b));setTimeout(()=>{if(items[i])rSell()},2500)}
+
+// 图鉴
+function rBook(){document.getElementById('cg').innerHTML=[...JADE_TYPES.map(j=>({icon:j.emoji,name:j.name,id:j.id,u:!!collJade[j.id]})),...CRAFTS.map(c=>({icon:c.icon,name:c.name,id:c.id,u:!!collCraft[c.id]}))].map(x=>`<div class="citem${x.u?'':' locked'}"><div class="ci">${x.u?x.icon:'❓'}</div><div class="cn">${x.u?x.name:'???'}</div></div>`).join('')}
+
+// 滑块
+document.getElementById('szS').addEventListener('input',function(){brush=parseInt(this.value);document.getElementById('szV').textContent=brush;const h=document.getElementById('szH');h.textContent=brush<=22?'🔬 细研':brush<=40?'👍 中磨':brush<=70?'⚡ 快磨':'⚠️ 伤玉';setTimeout(()=>h.textContent='',2000)});
+
+// 导航
+function sw(t){document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('cur'));document.querySelector(`[data-t="${t}"]`).classList.add('cur');document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));document.getElementById('page-'+t).classList.add('on');if(t!=='cut')cn();ua()}
+document.querySelectorAll('.nav-btn').forEach(b=>{b.addEventListener('click',()=>sw(b.dataset.t))});
+
+// 特效
+function cF(){const e=document.getElementById('cf');e.classList.remove('fire');void e.offsetWidth;e.classList.add('fire');setTimeout(()=>e.classList.remove('fire'),800)}
+function dP(){const e=document.getElementById('dp');e.textContent='🤝 成交！';e.classList.remove('fire');void e.offsetWidth;e.classList.add('fire');setTimeout(()=>e.classList.remove('fire'),900)}
+function sp(xP,yP,c,n){const p=document.getElementById('particles'),cx=innerWidth*xP/100,cy=innerHeight*yP/100;for(let i=0;i<n;i++){const d=document.createElement('div'),a=Math.random()*Math.PI*2,dist=40+Math.random()*110;d.style.cssText=`position:fixed;left:${cx}px;top:${cy}px;width:7px;height:7px;border-radius:50%;background:${c};pointer-events:none;transition:all ${.3+Math.random()*.6}s ease-out;opacity:1;z-index:1001`;p.appendChild(d);requestAnimationFrame(()=>{d.style.transform=`translate(${Math.cos(a)*dist}px,${Math.sin(a)*dist}px) scale(0)`;d.style.opacity='0'});setTimeout(()=>d.remove(),1100)}}
+function st(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),1800)}
+function sr(seed,r){const x=Math.sin(seed*127.1+311.7)*43758.5453;return (x-Math.floor(x))*r}
+
+load();if(!market.length)genDay();ua();
+</script>
+</body>
+</html>
