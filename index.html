@@ -457,6 +457,7 @@ function sp(xP,yP,c,n){const p=document.getElementById('particles'),cx=innerWidt
 function st(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),1800)}
 function sr(seed,r){const x=Math.sin(seed*127.1+311.7)*43758.5453;return (x-Math.floor(x))*r}
 
+if(location.search.includes('reset')){localStorage.removeItem(SK);location.href=location.pathname}
 load();if(!market.length)genDay();ua();
 </script>
 </body>
