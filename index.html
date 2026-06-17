@@ -193,7 +193,7 @@ body{
 @keyframes mIn{from{transform:scale(.85);opacity:0}to{transform:scale(1);opacity:1}}
 .mcard .mi{font-size:46px}.mcard .mt{font-size:17px;font-weight:700;margin:5px 0}.mcard .mb{font-size:11px;color:var(--ink2);margin-bottom:12px;line-height:1.5}
 .mcard .mbs{display:flex;gap:6px}.mcard .mbs button{flex:1;padding:10px;border-radius:18px;border:none;font-size:13px;font-weight:700;cursor:pointer;font-family:'STKaiti','KaiTi',serif}
-.myes{background:linear-gradient(180deg,#B22222,#6B0000);color:#FFD700;border:2px solid #E84855}.mno{background:#EDE0C8;color:var(--ink2);border:1px solid #A0782C}
+.myes{background:linear-gradient(180deg,#B22222,#6B0000);color:#FFD700;border:2px solid #E84855;cursor:pointer}.myes:active{background:#FF5252;transform:scale(.95)}.mno{background:#EDE0C8;color:var(--ink2);border:1px solid #A0782C}
 
 /* NPC气泡 */
 .npc-b{position:fixed;bottom:140px;left:50%;transform:translateX(-50%);z-index:250;background:linear-gradient(180deg,#FFF8E7,#EDE0C8);border-radius:16px;padding:10px 14px;box-shadow:0 6px 20px rgba(0,0,0,.3);font-size:11px;max-width:300px;text-align:center;animation:nIn .4s;border:2px solid #8B6914;display:none;font-family:'STKaiti','KaiTi',serif}
@@ -294,7 +294,7 @@ body{
 <div class="craft-panel" id="craftP"><div class="cp-title">🔨 玉料规划</div><div class="cp-info" id="cpInfo"></div><div class="cp-bar"><div class="cp-fill" id="cpFill" style="background:#4CAF50"></div></div><div class="cp-items" id="cpItems"></div><div style="display:flex;gap:4px;margin-top:6px"><button class="wood-btn green" id="btnExec" style="flex:1;font-size:11px;padding:6px" onclick="executePlan()">🔪 开工切割</button><button class="wood-btn gold" id="btnSellRaw" style="flex:1;font-size:11px;padding:6px">💰 直接卖料</button></div></div>
 
 <!-- 购买弹窗 -->
-<div class="modal" id="mBuy"><div class="mcard"><div class="mi" id="mI"></div><div class="mt" id="mT"></div><div class="mb" id="mB"></div><div class="mbs"><button class="mno" onclick="clM()">再想想</button><button class="myes" id="mY" data-sid="" onclick="confirmBuy()">买 下</button></div></div></div>
+<div class="modal" id="mBuy"><div class="mcard"><div class="mi" id="mI"></div><div class="mt" id="mT"></div><div class="mb" id="mB"></div><div class="mbs"><button class="mno" onclick="clM()">再想想</button><button class="myes" id="mY" data-sid="" ontouchend="confirmBuy()" onclick="confirmBuy()">买 下</button></div></div></div>
 
 <div class="bottom-nav">
   <button class="nav-btn cur" data-t="home"><span class="ni">🏠</span>展厅</button>
@@ -460,6 +460,8 @@ function st(m){const t=document.getElementById('toast');t.textContent=m;t.classL
 function sr(seed,r){const x=Math.sin(seed*127.1+311.7)*43758.5453;return (x-Math.floor(x))*r}
 
 load();if(!market.length)genDay();ua();
+// 确保购买按钮始终可点击
+document.getElementById('mY').addEventListener('click',confirmBuy);document.getElementById('mY').addEventListener('touchend',function(e){e.preventDefault();confirmBuy()});
 </script>
 </body>
 </html>
